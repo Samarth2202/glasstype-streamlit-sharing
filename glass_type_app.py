@@ -80,21 +80,55 @@ for i in features_list:
   sns.scatterplot(x=i, y='GlassType',data=glass_df)
   st.pyplot()
 
-st.sidebar.subheader('Histogram')
-# Choosing features for histograms.
-hist_features = st.sidebar.multiselect('Select Features to Create Histogram:',('RI', 'Na', 'Mg', 'Al', 'Si', 'K', 'Ca', 'Ba', 'Fe'))
+# Add a subheader in the sidebar with label "Visualisation Selector"
+st.sidebar.subheader('Visualisation Selector')
+# Add a multiselect in the sidebar with label 'Select the Charts/Plots:'
+# and with 6 options passed as a tuple ('Histogram', 'Box Plot', 'Count Plot', 'Pie Chart', 'Correlation Heatmap', 'Pair Plot').
+# Store the current value of this widget in a variable 'plot_types'.
+plot_types = st.sidebar.multiselect('Select the Charts/Plots : ',('Histogram', 'Box Plot', 'Count Plot', 'Pie Chart', 'Correlation Heatmap', 'Pair Plot'))
 
-# Create histograms.
-for i in hist_features:
-  st.subheader(f'Histogram between {i} and Glass Type')
+if 'Histogram' in plot_types:
+  st.subheader('Histogram')
+  columns = st.sidebar.selectbox('Select the column to create its histogram : ',('RI', 'Na', 'Mg', 'Al', 'Si', 'K', 'Ca', 'Ba', 'Fe'))
   plt.figure(figsize=(12,6))
-  plt.hist(glass_df[i],bins='sturges',edgecolor='k')
+  plt.title(f'Histogram for {columns}')
+  plt.hist(glass_df[columns],bins='sturges',edgecolor='k')
   st.pyplot()
 
-st.sidebar.subheader('Box Plot')
-boxplot_features = st.sidebar.multiselect('Select Columns to Create Boxplot:',('RI', 'Na', 'Mg', 'Al', 'Si', 'K', 'Ca', 'Ba', 'Fe'))
-for i in boxplot_features:
-  st.subheader(f'Box Plot between {i} and Glass Type')
+if 'Box Plot' in plot_types:
+  st.subheader('Box Plot')
+  columns = st.sidebar.selectbox('Select the column to create its Box Plot : ',('RI', 'Na', 'Mg', 'Al', 'Si', 'K', 'Ca', 'Ba', 'Fe','GlassType'))
   plt.figure(figsize=(12,2))
-  sns.boxplot(glass_df[i])
+  plt.title(f'Histogram for {columns}')
+  sns.boxplot(glass_df[columns])
   st.pyplot()
+
+if 'Count Plot' in plot_types:
+  st.subheader('Count Plot')
+  plt.figure(figsize=(12,6))
+  sns.countplot(x='GlassType',data=glass_df)
+  st.pyplot()
+# Create pie chart using the 'matplotlib.pyplot' module and the 'st.pyplot()' function.   
+if 'Pie Chart' in plot_types:
+  st.subheader('Pie Chart')
+  pie_data = glass_df['GlassType'].value_counts()
+  plt.figure(figsize=(5,5))
+  plt.pie(pie_data, labels=pie_data.index,autopct='%1.2f%%',startangle = 30, explode=np.linspace(.06,.16,6) )
+  st.pyplot()
+# Display correlation heatmap using the 'seaborn' module and the 'st.pyplot()' function.
+if 'Correlation Heatmap' in plot_types:
+  st.subheader('Correlation Heatmap')
+  plt.figure(figsize=(12,6))
+  ax = sns.heatmap(glass_df.corr(), annot=True)
+  bottom, top = ax.get_ylim()
+  ax.set_ylim(bottom + 0.5, top - 0.5)
+  st.pyplot()
+
+# Display pair plots using the the 'seaborn' module and the 'st.pyplot()' function. 
+if 'Pair Plots' in plot_types:
+  st.subheader('Pair Plots')
+  plt.figure(figsize=(15,15))
+  sns.pairplot(glass_df)
+  plt.pyplot()
+
+
