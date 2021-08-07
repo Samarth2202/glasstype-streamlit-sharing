@@ -151,19 +151,17 @@ if classify == 'Support Vector Machine':
   c_value = st.sidebar.number_input('C (Error Rate)',1,100,step=1)
   kernel_input = st.sidebar.radio('Kernel',('linear','rbf','poly'))
   gamma_value = st.sidebar.number_input('Gamma',1,100,step=1)
-    # If the user clicks 'Classify' button, perform prediction and display accuracy score and confusion matrix.
-    # This 'if' statement must be inside the above 'if' statement.
-    if st.sidebar.button('Classify'):
-      st.subheader('Support Vector Machine')
-      svc_model = SVC(C=c_value,kernel=kernel_input,gamma=gamma_value)
-      svc_model.fit(X_train, y_train)
-      y_pred = svc_model.predict(X_test)
-      acc = svc_model.score(X_test, y_test)
-      glass_type = prediction(svc_model, ri, na, mg, al, si, k, ca, ba, fe)
-      st.write(f'The type of glass predicted is : {glass_type}')
-      st.write(f'Accuracy : {acc:.2f}')
-      plot_confusion_matrix(svc_model, X_test, y_test)
-      st.pyplot()
+  if st.sidebar.button('Classify'):
+    st.subheader('Support Vector Machine')
+    svc_model = SVC(C=c_value,kernel=kernel_input,gamma=gamma_value)
+    svc_model.fit(X_train, y_train)
+    y_pred = svc_model.predict(X_test)
+    acc = svc_model.score(X_test, y_test)
+    glass_type = prediction(svc_model, ri, na, mg, al, si, k, ca, ba, fe)
+    st.write(f'The type of glass predicted is : {glass_type}')
+    st.write(f'Accuracy : {acc:.2f}')
+    plot_confusion_matrix(svc_model, X_test, y_test)
+    st.pyplot()
 
 
 # if classifier == 'Random Forest Classifier', ask user to input the values of 'n_estimators' and 'max_depth'.
@@ -171,15 +169,13 @@ if classify == 'Random Forest Classifier':
   st.sidebar.subheader('Model Hyperparameters')
   n_estimators_input = st.sidebar.number_input('Number of trees in the forest',100,5000,step=10)
   max_depth_input = st.sidebar.number_input('Maximum depth of the tree : ',1,100,step=1)
-    # If the user clicks 'Classify' button, perform prediction and display accuracy score and confusion matrix.
-    # This 'if' statement must be inside the above 'if' statement. 
-    if st.sidebar.button('Classify'):
-      st.subheader('Random Forest Classifier')
-      rf_clf = RandomForestClassifier(n_estimators=n_estimators_input,max_depth=max_depth_input,n_jobs=-1)
-      rf_clf.fit(X_train, y_train)
-      acc = rf_clf.score(X_test, y_test)
-      glass_type = prediction(rf_clf, ri, na, mg, al, si, k, ca, ba, fe)
-      st.write(f'The type of glass predicted is : {glass_type}')
-      st.write(f'Accuracy : {acc:.2f}')
-      plot_confusion_matrix(rf_clf, X_test, y_test)
-      st.pyplot()
+  if st.sidebar.button('Classify'):
+    st.subheader('Random Forest Classifier')
+    rf_clf = RandomForestClassifier(n_estimators=n_estimators_input,max_depth=max_depth_input,n_jobs=-1)
+    rf_clf.fit(X_train, y_train)
+    acc = rf_clf.score(X_test, y_test)
+    glass_type = prediction(rf_clf, ri, na, mg, al, si, k, ca, ba, fe)
+    st.write(f'The type of glass predicted is : {glass_type}')
+    st.write(f'Accuracy : {acc:.2f}')
+    plot_confusion_matrix(rf_clf, X_test, y_test)
+    st.pyplot()
