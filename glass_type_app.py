@@ -208,3 +208,20 @@ if classifier == 'Random Forest Classifier':
         st.write("Accuracy", accuracy.round(2))
         plot_confusion_matrix(rf_clf, X_test, y_test)
         st.pyplot()
+
+# S1.1: Implement Logistic Regression with hyperparameter tuning
+if classifier == 'Logistic Regression':
+    st.sidebar.subheader("Model Hyperparameters")
+    c_value = st.sidebar.number_input("C", 1, 100, step = 1)
+    max_iter_input = st.sidebar.number_input("Maximum Iterations", 10, 1000, step = 10)
+        
+    if st.sidebar.button('Classify'):
+        st.subheader("Logistic Regression")
+        log_reg = LogisticRegression(C=c_value, max_iter=max_iter_input)
+        log_reg.fit(X_train,y_train)
+        accuracy = log_reg.score(X_test, y_test)
+        glass_type = prediction(log_reg, ri, na, mg, al, si, k, ca, ba, fe)
+        st.write("The Type of glass predicted is:", glass_type)
+        st.write("Accuracy", accuracy.round(2))
+        plot_confusion_matrix(log_reg, X_test, y_test)
+        st.pyplot()
